@@ -26,7 +26,6 @@ def find_virtual_anchors(x,y,d):
     anchors.append([x-d*np.cos(np.pi/3),y+d*np.sin(np.pi/3)]);
     return anchors
 
-
 # Central anchor node
 anchor1 = sensor('anchor',7.5,7.5)
 
@@ -91,8 +90,5 @@ ani=FuncAnimation(fig=fig,func=update,interval=5)
 plt.show()
 
 
-      
 
-    
-    
 
