@@ -26,6 +26,23 @@ def find_virtual_anchors(x,y,d):
     anchors.append([x-d*np.cos(np.pi/3),y+d*np.sin(np.pi/3)]);
     return anchors
 
+# optimization function
+def optimization_fun(x,y, anchors, d):
+    f = 0
+    for i in range(3):
+        print(anchors[i].x,anchors[i].y )
+        f +=  math.pow(math.sqrt(math.pow((x-anchors[i].x),2) + math.pow((y-anchors[i].y),2)) - d,2)
+        print(f)
+    return f/3
+
+# testing optimization function
+anchors = []
+anchors.append(sensor('target',0,0))
+anchors.append(sensor('target',0,6))
+anchors.append(sensor('target',6,0))
+    
+print(optimization_fun(2,2,anchors,6))
+
 # Central anchor node
 anchor1 = sensor('anchor',7.5,7.5)
 
