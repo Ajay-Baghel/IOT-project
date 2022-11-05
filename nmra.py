@@ -1,5 +1,8 @@
 import numpy as np
 from sympy.stats import Levy
+def Fun(a):
+    
+    return np.random.rand(1)
 def NMRA(Ub,Lb,d,Fun,maxiter,n):
     bb=[]
 
@@ -52,8 +55,6 @@ def NMRA(Ub,Lb,d,Fun,maxiter,n):
         S=NMRSolution
         bb.append(fmin)
         return [bb,NMRBest,fmin]
-def Fun(a):
-    
-    return np.random.rand(1)
+
 bb,NMRBest,fmin=NMRA(100,-100,2,Fun,5,30)   
 print(bb)
