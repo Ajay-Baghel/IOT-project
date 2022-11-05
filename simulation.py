@@ -54,7 +54,7 @@ ax.set_xlim([0,15])
 ax.set_ylim([0,15])
 def update(i):
     global x_target
-    global y_target
+    global y_target,x,y
     new_x=[]
     new_y=[]
     for i in range(5):
@@ -66,14 +66,23 @@ def update(i):
             new_y[i]=np.random.randint(0,15,1)
     x_target=new_x
     y_target=new_y
+    for i in range(5):
+        d=math.dist([new_x[i],new_y[i]],[anchor1.x,anchor1.y]);
+        virtual_anchors=find_virtual_anchors(anchor1.x,anchor1.y,d)
+        virtual_anchors=np.array(virtual_anchors)
+        x,y=virtual_anchors.T 
+        
+
+       
     plt.cla()
     ax.set_xlim([0,15])
     ax.set_ylim([0,15])
+    ax.scatter([7.5],[7.5],c='yellow')
     ax.scatter(x,y)
     ax.scatter(new_x,new_y,marker='*')
+    plt.pause(1)
     
-    
-ani=FuncAnimation(fig=fig,func=update,interval=1000)    
+ani=FuncAnimation(fig=fig,func=update,interval=5)    
 plt.show()
 
 
