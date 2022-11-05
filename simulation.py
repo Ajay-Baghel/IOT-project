@@ -42,14 +42,14 @@ target_nodes=[]
 
 x_target=np.random.uniform(0,15,5)
 y_target=np.random.uniform(0,15,5)
-
+# target nodes list
 for i in range(5):
     target=sensor('target',x_target[i],y_target[i])
     target_nodes.append(target)
 
-
+# plotting graph for virtual and trget nodes
 fig,ax=plt.subplots()
-ax.scatter(x,y)
+# ax.scatter(x,y)
 ax.set_xlim([0,15])
 ax.set_ylim([0,15])
 def update(itr):
@@ -83,8 +83,8 @@ def update(itr):
     ax.set_xlim([0,15])
     ax.set_ylim([0,15])
     ax.scatter([7.5],[7.5],c='yellow')
-    ax.scatter(x,y)
-    ax.scatter(x_target,y_target)
+    # ax.scatter(x,y)
+    ax.scatter(x_target,y_target,marker='^')
     # plt.pause(1)
     
 ani=FuncAnimation(fig=fig,func=update,interval=5)    

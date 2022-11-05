@@ -1,5 +1,4 @@
 import numpy as np
-
 from sympy.stats import Levy
 def NMRA(Ub,Lb,d,Fun,maxiter,n):
     bb=[]
@@ -9,7 +8,7 @@ def NMRA(Ub,Lb,d,Fun,maxiter,n):
     workers=n-n/5
     iter=1
     NMRSolution=np.zeros((n,2))
-    NMRfitness=np.zeros()
+    NMRfitness=np.zeros(n)
     # print(NMRSolution.shape)
     for i in range(n):
       t=Lb+(Ub-Lb)*np.random.randn(d)
@@ -38,8 +37,7 @@ def NMRA(Ub,Lb,d,Fun,maxiter,n):
                NMRneighbour=np.arange(n//5)
                np.random.shuffle(NMRneighbour) 
             #    print(S[z].shape)
-               S[z]=(1-lmbda)
-               S[z]+(lmbda(NMRBest-NMRSolution[NMRneighbour[0]]).reshape(2,))
+               S[z]=(1-lmbda)*S[z]+(lmbda*(NMRBest-NMRSolution[NMRneighbour[0]]).reshape(2,))
                Fnew=Fun(S[z])
                if Fnew<=NMRfitness[z]:
                  NMRSolution[z]=S[z]
@@ -57,5 +55,5 @@ def NMRA(Ub,Lb,d,Fun,maxiter,n):
 def Fun(a):
     
     return np.random.rand(1)
-bb,NMRBest,fmin=NMRA(100,-100,2,Fun,5,30)
+bb,NMRBest,fmin=NMRA(100,-100,2,Fun,5,30)   
 print(bb)
