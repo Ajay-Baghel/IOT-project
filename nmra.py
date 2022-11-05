@@ -1,8 +1,15 @@
 import numpy as np
 from sympy.stats import Levy
-def Fun(a):
-    
-    return np.random.rand(1)
+import math
+def Fun(x,y, anchors, d):
+    f = 0
+    for i in range(3):
+        print(anchors[i].x,anchors[i].y )
+        f +=  math.pow(math.sqrt(math.pow((x-anchors[i].x),2) + math.pow((y-anchors[i].y),2)) - d,2)
+        print(f)
+    return f/3
+def Fun(i):
+    return 0;    
 def NMRA(Ub,Lb,d,Fun,maxiter,n):
     bb=[]
 
@@ -14,13 +21,16 @@ def NMRA(Ub,Lb,d,Fun,maxiter,n):
     NMRfitness=np.zeros(n)
     # print(NMRSolution.shape)
     for i in range(n):
-      t=Lb+(Ub-Lb)*np.random.randn(d)
-      NMRSolution[i]=t
+      tx=Lb+(Ub-Lb)*np.random.randn()
+      ty=Lb+(Ub-Lb)*np.random.randn()
+      NMRSolution[i][0]=tx
+      NMRSolution[i][1]=ty
       NMRfitness[i]=Fun(NMRSolution[i])
     I=np.argmin(NMRfitness)
-    fmin=NMRSolution[I]
+    fmin=NMRfitness[I]
     NMRBest=NMRSolution[I]
     S=NMRSolution
+    print(NMRSolution)
     while iter<maxiter:
         for i in range(int(workers)):
             lmbda=np.random.randn(0,1)
@@ -49,12 +59,12 @@ def NMRA(Ub,Lb,d,Fun,maxiter,n):
             Flag4Ub=S[i]>Ub
             Flag4Lb=S[i]<Lb
             S[i]=S[i]*(~(Flag4Ub+Flag4Lb))+Ub*Flag4Ub+Lb*Flag4Lb   
-        I=np.argmin(NMRfitness)
-        fmin=NMRSolution[I]
-        NMRBest=NMRSolution[I]
-        S=NMRSolution
-        bb.append(fmin)
-        return [bb,NMRBest,fmin]
+    I=np.argmin(NMRfitness)
+    fmin=NMRSolution[I]
+    NMRBest=NMRSolution[I]
+    S=NMRSolution
+    bb.append(fmin)
+    return [bb,NMRBest,fmin]
 
 bb,NMRBest,fmin=NMRA(100,-100,2,Fun,5,30)   
-print(bb)
+print(NMRBest)
