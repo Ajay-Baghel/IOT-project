@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 import pandas as pd
-
+import random
 class sensor:
     def __init__(self, type, x, y, x_e = 0, y_e = 0):
         self.type = type
@@ -55,23 +55,22 @@ ax.set_ylim([0,15])
 def update(i):
     global x_target
     global y_target,x,y
-    new_x=[]
-    new_y=[]
+    
     for i in range(5):
-        new_x=np.append(new_x,x_target[i]+0.1*np.random.randint(-10,10))
-        new_y=np.append(new_y,y_target[i]+0.1*np.random.randint(-10,10))
-        if new_x[i]<0 or new_x[i]>15:
-            new_x[i]=np.random.randint(0,15,1)
-        if new_y[i]<0 or new_y[i]>15:
-            new_y[i]=np.random.randint(0,15,1)
-    x_target=new_x
-    y_target=new_y
+        x_target[i]+=0.1*np.random.randint(-10,10)
+        y_target[i]+=0.1*np.random.randint(-10,10)
+        if x_target[i]<0 or x_target[i]>15:
+            x_target[i]=random.randint(0,15)
+        if y_target[i]<0 or y_target[i]>15:
+            y_target[i]=random.randint(0,15)
+    
     for i in range(5):
-        d=math.dist([new_x[i],new_y[i]],[anchor1.x,anchor1.y]);
+        d=math.dist([x_target[i],y_target[i]],[anchor1.x,anchor1.y]);
         virtual_anchors=find_virtual_anchors(anchor1.x,anchor1.y,d)
         virtual_anchors=np.array(virtual_anchors)
         x,y=virtual_anchors.T 
         
+       
 
        
     plt.cla()
@@ -79,7 +78,7 @@ def update(i):
     ax.set_ylim([0,15])
     ax.scatter([7.5],[7.5],c='yellow')
     ax.scatter(x,y)
-    ax.scatter(new_x,new_y,marker='*')
+    ax.scatter(x_target,y_target)
     plt.pause(1)
     
 ani=FuncAnimation(fig=fig,func=update,interval=5)    
