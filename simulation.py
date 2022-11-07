@@ -41,10 +41,10 @@ x,y=virtual_anchors.T
 
 target_nodes=[]
 
-x_target=np.random.uniform(0,15,5)
-y_target=np.random.uniform(0,15,5)
+x_target=np.random.uniform(0,15,1)
+y_target=np.random.uniform(0,15,1)
 # target nodes list
-for i in range(5):
+for i in range(len(x_target)):
     target=sensor('target',x_target[i],y_target[i])
     target_nodes.append(target)
 
@@ -59,15 +59,15 @@ def update(itr):
     global y_target,x,y
     
     # Adding random movement to the target nodes
-    for i in range(5):
-        x_target[i]+=0.1*random.randint(-5,5)
-        y_target[i]+=0.1*random.randint(-5,5)
+    for i in range(len(x_target)):
+        x_target[i]+=0.1*random.randint(-15,15)
+        y_target[i]+=0.1*random.randint(-15,15)
         if x_target[i]<0 or x_target[i]>15:
             x_target[i]=random.randint(0,15)
         if y_target[i]<0 or y_target[i]>15:
             y_target[i]=random.randint(0,15)
 
-    for i in range(5):
+    for i in range(len(x_target)):
         d=math.dist([x_target[i],y_target[i]],[anchor1.x,anchor1.y]);
         virtual_anchors=find_virtual_anchors(anchor1.x,anchor1.y,d)
         va_dist=[]
