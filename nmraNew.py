@@ -13,15 +13,16 @@ class sensor:
         self.y_e = y_e
 
 # Optimization/cost function
-def Fun(x,y, anchors, d):
+def Fun(x,y, anchors, target):
     f = 0
     for i in range(3):
         # print(anchors[i].x,anchors[i].y )
+        d = math.dist([target[0],target[1]], [anchors[i][0],anchors[i][1]])
         f +=  math.pow(math.sqrt(math.pow((x-anchors[i][0]),2) + math.pow((y-anchors[i][1]),2)) - d,2)
         # print(f)
     return f/3
 
-def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
+def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors,target):
     rats=[]
     workers=n-n//5
     breeders=n//5
@@ -32,7 +33,7 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
         x1=x_lb+np.random.random()*(x_ub-x_lb)
         y1=y_lb+np.random.random()*(y_ub-y_lb)
         rats.append([x1,y1])
-        fitness.append(Fun(x1,y1,anchors,d))
+        fitness.append(Fun(x1,y1,anchors,target))
     I=fitness.index(min(fitness))
     ratBest=rats[I]
     # print(fitness)
@@ -62,7 +63,7 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
             S[idx][0] = S[idx][0] + lmda * (S[ab[0]][0] - S[ab[1]][0])
             S[idx][1] = S[idx][1] + lmda * (S[ab[0]][1] - S[ab[1]][1])
             # Calculating and updating new fitness and rat's coordinates
-            fnew = Fun(S[idx][0], S[idx][1], anchors, d)
+            fnew = Fun(S[idx][0], S[idx][1], anchors, target)
             if fnew < fitness[idx]:
                 fitness[idx] = fnew
                 rats[idx]= S[idx]
@@ -75,14 +76,11 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
                 
                 S[idx][0] = (1-lmda)*S[idx][0] + lmda*(ratBest[0] - S[idx][0])
                 S[idx][1] = (1-lmda)*S[idx][1] + lmda*(ratBest[1] - S[idx][1])
-                fnew = Fun(S[idx][0], S[idx][1], anchors, d)
+                fnew = Fun(S[idx][0], S[idx][1], anchors, target)
                 if fnew < fitness[idx]:
                     fitness[idx] = fnew
                     rats[idx]= S[idx]
         
-        
-
-
         # updating the sorted_fitness list
         sorted_fitness = []
         for i in range(n):

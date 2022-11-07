@@ -94,7 +94,7 @@ def update(itr):
         idx1,idx2=va_dist[0][1],va_dist[1][1]
         va1,va2=virtual_anchors[idx1],virtual_anchors[idx2]
         centeroid_x,centeroid_y=(va1[0]+va2[0]+anchor1.x)/3,(va1[1]+va2[1]+anchor1.y)/2
-        coordiantes=NMRA(centeroid_x-d,centeroid_x+d,centeroid_y-d,centeroid_y+d,50,3,100,[[anchor1.x,anchor1.y],va1,va2])
+        coordiantes=NMRA(centeroid_x-d,centeroid_x+d,centeroid_y-d,centeroid_y+d,50,3,100,[[anchor1.x,anchor1.y],va1,va2],[x_target[i],y_target[i]])
         print(coordiantes,[x_target[i],y_target[i]])
 
     # print("hello")   
