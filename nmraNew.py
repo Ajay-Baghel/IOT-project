@@ -3,6 +3,7 @@ from sympy.stats import Levy
 import math
 import random
 import matplotlib.pyplot as plt
+
 class sensor:
     def __init__(self, type, x, y, x_e = 0, y_e = 0):
         self.type = type
@@ -10,7 +11,8 @@ class sensor:
         self.y = y
         self.x_e = x_e
         self.y_e = y_e
-    
+
+# Optimization/cost function
 def Fun(x,y, anchors, d):
     f = 0
     for i in range(3):
@@ -18,7 +20,6 @@ def Fun(x,y, anchors, d):
         f +=  math.pow(math.sqrt(math.pow((x-anchors[i].x),2) + math.pow((y-anchors[i].y),2)) - d,2)
         # print(f)
     return f/3
-
 
 def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
     rats=[]
@@ -34,12 +35,14 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
         fitness.append(Fun(x1,y1,anchors,d))
     I=fitness.index(min(fitness))
     ratBest=rats[I]
+    # print(fitness)
     
     best=fitness[I]
     sorted_fitness = []
     for i in range(n):
         l = [fitness[i],i]
         sorted_fitness.append(l)
+
     changes=[]
     sorted_fitness.sort()
     # print(sorted_fitness)
@@ -47,20 +50,6 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
         S = rats
         tmp=rats
         # print(rats)
-        
-        for i in range(breeders):
-            if np.random.random() > bp:
-                lmda = np.random.random()
-                idx = sorted_fitness[i][1]
-                
-                S[idx][0] = (1-lmda)*S[idx][0] + lmda*(ratBest[0] - S[idx][0])
-                S[idx][1] = (1-lmda)*S[idx][1] + lmda*(ratBest[1] - S[idx][1])
-                fnew = Fun(S[idx][0], S[idx][1], anchors, d)
-                if fnew < fitness[idx]:
-                    fitness[idx] = fnew
-                    rats[idx]= S[idx]
-        # creating workers getting list for random workers
-        
         
         # Workers phase
         for i in range(breeders, n):
@@ -77,6 +66,21 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
             if fnew < fitness[idx]:
                 fitness[idx] = fnew
                 rats[idx]= S[idx]
+        
+        # Breeders phase
+        for i in range(breeders):
+            if np.random.random() > bp:
+                lmda = np.random.random()
+                idx = sorted_fitness[i][1]
+                
+                S[idx][0] = (1-lmda)*S[idx][0] + lmda*(ratBest[0] - S[idx][0])
+                S[idx][1] = (1-lmda)*S[idx][1] + lmda*(ratBest[1] - S[idx][1])
+                fnew = Fun(S[idx][0], S[idx][1], anchors, d)
+                if fnew < fitness[idx]:
+                    fitness[idx] = fnew
+                    rats[idx]= S[idx]
+        
+        
 
 
         # updating the sorted_fitness list
@@ -92,6 +96,7 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
 
         # print(rats)
     print(changes)
+    print(fitness)
     
     new_list=np.array(changes)
     xt,yt=new_list.T
@@ -105,4 +110,4 @@ anchors = []
 anchors.append(sensor('target',0,0))
 anchors.append(sensor('target',0,6))
 anchors.append(sensor('target',6,0))    
-NMRA(-4,8,-4,8,100,2,30,anchors)
+NMRA(-4,8,-4,8,100,2,10,anchors)
