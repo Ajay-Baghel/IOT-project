@@ -17,7 +17,7 @@ def Fun(x,y, anchors, d):
     f = 0
     for i in range(3):
         # print(anchors[i].x,anchors[i].y )
-        f +=  math.pow(math.sqrt(math.pow((x-anchors[i].x),2) + math.pow((y-anchors[i].y),2)) - d,2)
+        f +=  math.pow(math.sqrt(math.pow((x-anchors[i][0]),2) + math.pow((y-anchors[i][1]),2)) - d,2)
         # print(f)
     return f/3
 
@@ -88,20 +88,20 @@ def NMRA(x_lb,x_ub,y_lb,y_ub,maxIter,best,n,anchors):
         for i in range(n):
             l = [fitness[i],i]
             sorted_fitness.append(l)
-
         sorted_fitness.sort()
-        idr=sorted_fitness[0][1]
-        changes.append(rats[idr])
-        
-
-        # print(rats)
-    print(changes)
-    print(fitness)
     
-    new_list=np.array(changes)
-    xt,yt=new_list.T
-    plt.scatter(xt,yt)
-    plt.show()
+    idr=sorted_fitness[0][1]
+        
+    
+    return rats[idr]
+        # print(rats)
+    # print(changes)
+    # print(fitness)
+    
+    # new_list=np.array(changes)
+    # xt,yt=new_list.T
+    # plt.scatter(xt,yt)
+    # plt.show()
 
 
         
@@ -110,4 +110,4 @@ anchors = []
 anchors.append(sensor('target',0,0))
 anchors.append(sensor('target',0,6))
 anchors.append(sensor('target',6,0))    
-NMRA(-4,8,-4,8,100,2,10,anchors)
+# NMRA(-4,8,-4,8,100,2,10,anchors)
