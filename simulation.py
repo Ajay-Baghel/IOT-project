@@ -46,9 +46,6 @@ print(optimization_fun(2,2,anchors,6))
 # Central anchor node
 anchor1 = sensor('anchor',7.5,7.5)
 
-
-
-
 # finding virtual anchors
 virtual_anchors=find_virtual_anchors(anchor1.x,anchor1.y,3)
 virtual_anchors=np.array(virtual_anchors)
@@ -63,7 +60,8 @@ for i in range(5):
     target=sensor('target',x_target[i],y_target[i])
     target_nodes.append(target)
 
-# plotting graph for virtual and trget nodes
+# plotting graph for virtual and target nodes
+
 fig,ax=plt.subplots()
 # ax.scatter(x,y)
 ax.set_xlim([0,15])
@@ -72,6 +70,7 @@ def update(itr):
     global x_target
     global y_target,x,y
     
+    # Adding random movement to the target nodes
     for i in range(5):
         x_target[i]+=0.1*random.randint(-5,5)
         y_target[i]+=0.1*random.randint(-5,5)
@@ -99,11 +98,11 @@ def update(itr):
     ax.set_xlim([0,15])
     ax.set_ylim([0,15])
     ax.scatter([7.5],[7.5],c='yellow')
-    # ax.scatter(x,y)
+    ax.scatter(x,y)
     ax.scatter(x_target,y_target,marker='^')
     # plt.pause(1)
     
-ani=FuncAnimation(fig=fig,func=update,interval=5)    
+ani=FuncAnimation(fig=fig,func=update,interval=10)    
 plt.show()
 
 
