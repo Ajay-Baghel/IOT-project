@@ -1,1 +1,1 @@
-centeroid_x,centeroid_y=(va1[0]+va2[0]+anchor1.x)/3,(va1[1]+va2[1]+anchor1.y)/2
+scatter
