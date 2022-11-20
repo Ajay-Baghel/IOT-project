@@ -6,6 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pandas as pd
 import random
 from nmraNew import *
+import copy
 
 class sensor:
     def __init__(self, type, x, y, x_e = 0, y_e = 0):
@@ -52,20 +53,21 @@ for i in range(len(x_target)):
 
 fig,ax=plt.subplots()
 scatter=ax.scatter(x,y)
+# fig1,ax1=plt.subplots()
 ax.set_xlim([0,15])
 ax.set_ylim([0,15])
 def update(itr):
     global x_target
     global y_target,x,y
-    
+    changes=[]
     # Adding random movement to the target nodes
     for i in range(len(x_target)):
-        x_target[i]+=0.1*random.randint(-15,15)
-        y_target[i]+=0.1*random.randint(-15,15)
+        x_target[i]+=0.1*random.uniform(-15,15)
+        y_target[i]+=0.1*random.uniform(-15,15)
         if x_target[i]<0 or x_target[i]>15:
-            x_target[i]=random.randint(0,15)
+            x_target[i]=random.uniform(0,15)
         if y_target[i]<0 or y_target[i]>15:
-            y_target[i]=random.randint(0,15)
+            y_target[i]=random.uniform(0,15)
 
     for i in range(len(x_target)):
         d=math.dist([x_target[i],y_target[i]],[anchor1.x,anchor1.y]);
@@ -78,10 +80,10 @@ def update(itr):
         va_dist.sort()
         idx1,idx2=va_dist[0][1],va_dist[1][1]
         va1,va2=virtual_anchors[idx1],virtual_anchors[idx2]
-        centeroid_x,centeroid_y=(va1[0]+va2[0]+anchor1.x)/3,(va1[1]+va2[1]+anchor1.y)/2
-        coordiantes=NMRA(centeroid_x-d,centeroid_x+d,centeroid_y-d,centeroid_y+d,50,3,100,[[anchor1.x,anchor1.y],va1,va2],[x_target[i],y_target[i]])
-        print(coordiantes,[x_target[i],y_target[i]])
-
+        centeroid_x,centeroid_y=(va1[0]+va2[0]+anchor1.x)/3,(va1[1]+va2[1]+anchor1.y)/3
+        coordiantes=NMRA(centeroid_x-1,centeroid_x+1,centeroid_y-1,centeroid_y+1,10,3,30,[[anchor1.x,anchor1.y],va1,va2],[x_target[i],y_target[i]])
+        print(int(coordiantes[0]),int(coordiantes[1]),int(x_target[i]),int(y_target[i]))
+        changes.append(math.dist([coordiantes[0],coordiantes[1]],[x_target[i],y_target[i]]))
     # print("hello")   
     plt.cla()
     ax.set_xlim([0,15])
@@ -89,9 +91,10 @@ def update(itr):
     ax.scatter([7.5],[7.5],c='yellow')
     ax.scatter(x,y)
     ax.scatter(x_target,y_target,marker='^')
-    # plt.pause(1)
     
-ani=FuncAnimation(fig=fig,func=update,interval=1000)    
+    
+ani=FuncAnimation(fig=fig,func=update,interval=1000)   
+
 plt.show()
 
 
