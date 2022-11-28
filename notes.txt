@@ -1,2 +1,0 @@
-create a list of object references
-//virtual nodes not required

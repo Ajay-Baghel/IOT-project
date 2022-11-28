@@ -8,6 +8,11 @@ import random
 from nmraNew import *
 import copy
 
+# 1) virtual anchor nodes jb bhi estimate krna h
+# 2) two nearest va's
+# 3) centroid calci which is init guess
+# 4) optimize using NMRA.
+
 class sensor:
     def __init__(self, type, x, y, x_e = 0, y_e = 0):
         self.type = type
@@ -42,8 +47,8 @@ x,y=virtual_anchors.T
 
 target_nodes=[]
 
-x_target=np.random.uniform(0,15,1)
-y_target=np.random.uniform(0,15,1)
+x_target=np.random.uniform(0,15,20)
+y_target=np.random.uniform(0,15,20)
 # target nodes list
 for i in range(len(x_target)):
     target=sensor('target',x_target[i],y_target[i])
@@ -51,7 +56,8 @@ for i in range(len(x_target)):
 
 # plotting graph for virtual and target nodes
 
-fig,ax=plt.subplots()
+fig,ax=plt.subplots(figsize=(10, 10))
+
 scatter=ax.scatter(x,y)
 # fig1,ax1=plt.subplots()
 ax.set_xlim([0,15])
@@ -82,19 +88,19 @@ def update(itr):
         va1,va2=virtual_anchors[idx1],virtual_anchors[idx2]
         centeroid_x,centeroid_y=(va1[0]+va2[0]+anchor1.x)/3,(va1[1]+va2[1]+anchor1.y)/3
         coordiantes=NMRA(centeroid_x-1,centeroid_x+1,centeroid_y-1,centeroid_y+1,10,3,30,[[anchor1.x,anchor1.y],va1,va2],[x_target[i],y_target[i]])
-        print(int(coordiantes[0]),int(coordiantes[1]),int(x_target[i]),int(y_target[i]))
+        # print(int(coordiantes[0]),int(coordiantes[1]),int(x_target[i]),int(y_target[i]))
         changes.append(math.dist([coordiantes[0],coordiantes[1]],[x_target[i],y_target[i]]))
     # print("hello")   
     plt.cla()
     ax.set_xlim([0,15])
     ax.set_ylim([0,15])
-    ax.scatter([7.5],[7.5],c='yellow')
-    ax.scatter(x,y)
-    ax.scatter(x_target,y_target,marker='^')
+    ax.scatter([7.5],[7.5],c='forestgreen',label="Single Anchor Node",s=200)
+    ax.scatter(x,y,s=100,marker='D',c="chartreuse",label='Virtual Anchors')
+    ax.scatter(x_target,y_target,marker='2',s=200,label="Moving Target Nodes",c="deepskyblue")
+    ax.legend()
     
-    
-ani=FuncAnimation(fig=fig,func=update,interval=1000)   
-
+ani=FuncAnimation(fig=fig,func=update,interval=500)   
+plt.legend()
 plt.show()
 
 
