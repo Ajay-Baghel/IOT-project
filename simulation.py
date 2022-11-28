@@ -8,10 +8,10 @@ import random
 from nmraNew import *
 import copy
 
-1) virtual anchor nodes jb bhi estimate krna h
-2) two nearest va's
-3) centroid calci which is init guess
-4) optimize using NMRA.
+# 1) virtual anchor nodes jb bhi estimate krna h
+# 2) two nearest va's
+# 3) centroid calci which is init guess
+# 4) optimize using NMRA.
 
 class sensor:
     def __init__(self, type, x, y, x_e = 0, y_e = 0):
